@@ -1,6 +1,6 @@
 {
     "name": "overarg",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "A tool to help with returning typed arguments from overloaded functions in TypeScript.",
     "main": "dist/index.js",
     "scripts": {

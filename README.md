@@ -5,44 +5,35 @@ A tool to help with returning typed arguments from overloaded functions in TypeS
 
 ## What it does
 
-Consider a method that looks like this:
+Consider an overloaded method that can take 0-3 arguments in any combination that looks like this...
 
 ```typescript
-// list the blobs via a streaming pattern
-public list<Out = azs.BlobService.BlobResult>(): ReadableStream<azs.BlobService.BlobResult, Out>;
-public list<Out = azs.BlobService.BlobResult>(prefix: string): ReadableStream<azs.BlobService.BlobResult, Out>;
-public list<Out = azs.BlobService.BlobResult>(transform: StreamTransform<azs.BlobService.BlobResult, Out>): ReadableStream<azs.BlobService.BlobResult, Out>;
-public list<Out = azs.BlobService.BlobResult>(options: StreamOptions<azs.BlobService.BlobResult, Out>): ReadableStream<azs.BlobService.BlobResult, Out>;
-public list<Out = azs.BlobService.BlobResult>(prefix: string, options: StreamOptions<azs.BlobService.BlobResult, Out>): ReadableStream<azs.BlobService.BlobResult, Out>;
-public list<Out = azs.BlobService.BlobResult>(prefix: string, transform: StreamTransform<azs.BlobService.BlobResult, Out>): ReadableStream<azs.BlobService.BlobResult, Out>;
-public list<Out = azs.BlobService.BlobResult>(transform: StreamTransform<azs.BlobService.BlobResult, Out>, options: StreamOptions<azs.BlobService.BlobResult, Out>): ReadableStream<azs.BlobService.BlobResult, Out>;
-public list<Out = azs.BlobService.BlobResult>(prefix: string, transform: StreamTransform<azs.BlobService.BlobResult, Out>, options: StreamOptions<azs.BlobService.BlobResult, Out>): ReadableStream<azs.BlobService.BlobResult, Out>;
-public list<Out = azs.BlobService.BlobResult>(): ReadableStream<azs.BlobService.BlobResult, Out> {
-
-    // get arguments
-    let prefix: string | undefined = undefined;
-    let out_options: StreamOptions<azs.BlobService.BlobResult, T> = {};
-    if (arguments[0] && typeof arguments[0] === "object") out_options = arguments[0];
-    if (arguments[1] && typeof arguments[1] === "object") out_options = arguments[1];
-    if (arguments[2] && typeof arguments[2] === "object") out_options = arguments[2];
-    if (arguments[0] && typeof arguments[0] === "string") prefix = arguments[0];
-    if (arguments[0] && typeof arguments[0] === "function") out_options.transform = arguments[0];
-    if (arguments[1] && typeof arguments[1] === "function") out_options.transform = arguments[1];
-
-}
+public test(name: string): void;
+public test(age: number): void;
+public test(dob: Date): void;
+public test(name: string, age: number): void;
+public test(name: string, dob: Date): void;
+public test(age: number, dob: Date): void;
+public test(name: string, age: number, dob: Date): void;
+public test(): void { }
 ```
 
-This module addresses the "get arguments" section, making it look like this:
+You might have to write a bunch of logic to figure out what parameters you have, or you could do this inside the function:
 
 ```typescript
-    // get arguments
-    const prefix = overarg<string>("string", ...arguments);
-    const transform = overarg<StreamTransform<azs.BlobService.BlobResult, Out>>("function", ...arguments);
-    const options = overarg<StreamOptions<azs.BlobService.BlobResult, Out>>("object", ...arguments) || {};
-    if (transform) options.transform = transform;
+const name = overarg<string>("string", ...arguments);
+const age = overarg<number>("number", ...arguments);
+const dob = overarg<Date>("object", ...arguments);
 ```
 
-It makes it easier to read and less likely to make a mistake. As you will see, it also allows for several situations that the above does not address (such as multiple parameters of the same type).
+Each variables will be strong-typed or undefined, easy as can be. You can even have multiple arguments of the same type and specify an offset so for instance:
+
+```typescript
+// 1st string provided is firstName
+const firstName = overarg<string>(0, "string", ...arguments);
+// 2nd string provided is lastName
+const lastName = overarg<string>(1, "string", ...arguments);
+```
 
 ## Installation
 
@@ -133,4 +124,41 @@ const test = (...args: any[]): void => {
     const variable1 = overarg<string>("string", ...args);
 }
 test("testing");
+```
+
+## Real-World Example
+
+```typescript
+// list the blobs via a streaming pattern
+public list<Out = azs.BlobService.BlobResult>(): ReadableStream<azs.BlobService.BlobResult, Out>;
+public list<Out = azs.BlobService.BlobResult>(prefix: string): ReadableStream<azs.BlobService.BlobResult, Out>;
+public list<Out = azs.BlobService.BlobResult>(transform: StreamTransform<azs.BlobService.BlobResult, Out>): ReadableStream<azs.BlobService.BlobResult, Out>;
+public list<Out = azs.BlobService.BlobResult>(options: StreamOptions<azs.BlobService.BlobResult, Out>): ReadableStream<azs.BlobService.BlobResult, Out>;
+public list<Out = azs.BlobService.BlobResult>(prefix: string, options: StreamOptions<azs.BlobService.BlobResult, Out>): ReadableStream<azs.BlobService.BlobResult, Out>;
+public list<Out = azs.BlobService.BlobResult>(prefix: string, transform: StreamTransform<azs.BlobService.BlobResult, Out>): ReadableStream<azs.BlobService.BlobResult, Out>;
+public list<Out = azs.BlobService.BlobResult>(transform: StreamTransform<azs.BlobService.BlobResult, Out>, options: StreamOptions<azs.BlobService.BlobResult, Out>): ReadableStream<azs.BlobService.BlobResult, Out>;
+public list<Out = azs.BlobService.BlobResult>(prefix: string, transform: StreamTransform<azs.BlobService.BlobResult, Out>, options: StreamOptions<azs.BlobService.BlobResult, Out>): ReadableStream<azs.BlobService.BlobResult, Out>;
+public list<Out = azs.BlobService.BlobResult>(): ReadableStream<azs.BlobService.BlobResult, Out> {
+
+    // get arguments
+    let prefix: string | undefined = undefined;
+    let out_options: StreamOptions<azs.BlobService.BlobResult, T> = {};
+    if (arguments[0] && typeof arguments[0] === "object") out_options = arguments[0];
+    if (arguments[1] && typeof arguments[1] === "object") out_options = arguments[1];
+    if (arguments[2] && typeof arguments[2] === "object") out_options = arguments[2];
+    if (arguments[0] && typeof arguments[0] === "string") prefix = arguments[0];
+    if (arguments[0] && typeof arguments[0] === "function") out_options.transform = arguments[0];
+    if (arguments[1] && typeof arguments[1] === "function") out_options.transform = arguments[1];
+
+}
+```
+
+This module addresses the "get arguments" section, making it look like this:
+
+```typescript
+    // get arguments
+    const prefix = overarg<string>("string", ...arguments);
+    const transform = overarg<StreamTransform<azs.BlobService.BlobResult, Out>>("function", ...arguments);
+    const options = overarg<StreamOptions<azs.BlobService.BlobResult, Out>>("object", ...arguments) || {};
+    if (transform) options.transform = transform;
 ```
