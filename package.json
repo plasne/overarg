@@ -1,0 +1,31 @@
+{
+    "name": "overarg",
+    "version": "1.0.0",
+    "description": "A tool to help with returning typed arguments from overloaded functions in TypeScript.",
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "tsc",
+        "test": "mocha dist/test.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/plasne/overarg.git"
+    },
+    "keywords": [
+        "typescript",
+        "overload",
+        "arguments"
+    ],
+    "author": "Peter Lasne",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/plasne/overarg/issues"
+    },
+    "homepage": "https://github.com/plasne/overarg#readme",
+    "devDependencies": {
+        "@types/mocha": "^5.2.5",
+        "@types/node": "^10.10.1",
+        "mocha": "^5.2.0",
+        "ts-node": "^7.0.1"
+    }
+}
