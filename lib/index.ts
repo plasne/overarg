@@ -30,6 +30,10 @@ function addToProtochain(a: any, list: string[]) {
     if (a.__proto__) addToProtochain(a.__proto__, list);
 }
 
+/**
+ * This takes an object and returns an array of the names of the prototypes
+ * it is composed of.
+ */
 export function getProtochain(a: any): string[] {
     const list: string[] = [];
     if (a.constructor) addToProtochain(a.constructor, list);

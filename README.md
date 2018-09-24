@@ -115,7 +115,7 @@ assert.strictEqual(result2, dog);
 
 ## Arrow Functions
 
-Please note that JavaScript Arrow Functions do not have their own *arguments* (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions], but you can use ...args: any[] in TypeScript even on an Arrow Function and it will generate proper JavaScript.
+Please note that JavaScript Arrow Functions do not have their own *arguments* [https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions), but you can use ...args: any[] in TypeScript even on an Arrow Function and it will generate proper JavaScript.
 
 In that case, you should pass ...args instead of ...arguments.
 
