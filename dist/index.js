@@ -35,6 +35,10 @@ function addToProtochain(a, list) {
     if (a.__proto__)
         addToProtochain(a.__proto__, list);
 }
+/**
+ * This takes an object and returns an array of the names of the prototypes
+ * it is composed of.
+ */
 function getProtochain(a) {
     var list = [];
     if (a.constructor)

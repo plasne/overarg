@@ -1,4 +1,8 @@
 declare type identityFunction = (arg: any) => boolean;
+/**
+ * This takes an object and returns an array of the names of the prototypes
+ * it is composed of.
+ */
 export declare function getProtochain(a: any): string[];
 /**
  * This tool helps with overloaded functions by allowing you to get the n-th argument
